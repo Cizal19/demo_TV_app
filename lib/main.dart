@@ -1,19 +1,10 @@
+import "package:demo_tv_app/utils/actionHandler.dart";
+import "package:demo_tv_app/widgets/CustomFocus.dart";
 import "package:flutter/material.dart";
-import "package:flutter/services.dart";
 
 void main() {
   runApp(MyApp());
 }
-
-class LeftButtonIntent extends Intent {}
-
-class RightButtonIntent extends Intent {}
-
-class UpButtonIntent extends Intent {}
-
-class DownButtonIntent extends Intent {}
-
-class EnterButtonIntent extends Intent {}
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -81,14 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),
-        child: Shortcuts(
-          shortcuts: <ShortcutActivator, Intent>{
-            LogicalKeySet(LogicalKeyboardKey.arrowLeft): LeftButtonIntent(),
-            LogicalKeySet(LogicalKeyboardKey.arrowRight): RightButtonIntent(),
-            LogicalKeySet(LogicalKeyboardKey.arrowUp): UpButtonIntent(),
-            LogicalKeySet(LogicalKeyboardKey.arrowDown): DownButtonIntent(),
-            LogicalKeySet(LogicalKeyboardKey.select): EnterButtonIntent(),
-          },
+        child: ActionHandler().handleArrowandEnterActions(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
@@ -109,20 +93,9 @@ class _MyHomePageState extends State<MyHomePage> {
                         _changeFocus(context, _icon2FocusNode!);
                       }),
                     },
-                    child: Focus(
-                      focusNode: _icon1FocusNode,
-                      child: Container(
-                        padding: EdgeInsets.all(15),
-                        decoration: BoxDecoration(
-                            border: !(_icon1FocusNode?.hasFocus ?? false)
-                                ? null
-                                : Border.all(
-                                    width: 5, color: Color(0xffeb1555))),
-                        child: Icon(
-                          Icons.laptop,
-                          size: 50,
-                        ),
-                      ),
+                    child: CustomFocus(
+                      iconFocusNode: _icon1FocusNode,
+                      child: Icon(Icons.laptop),
                     ),
                   ),
                   Actions(
@@ -138,76 +111,49 @@ class _MyHomePageState extends State<MyHomePage> {
                         _changeFocus(context, _icon1FocusNode!);
                       }),
                     },
-                    child: Focus(
-                      focusNode: _icon2FocusNode,
-                      child: Container(
-                        padding: EdgeInsets.all(15),
-                        decoration: BoxDecoration(
-                            border: !(_icon2FocusNode?.hasFocus ?? false)
-                                ? null
-                                : Border.all(
-                                    width: 5, color: Color(0xffeb1555))),
-                        child: Icon(
-                          Icons.desktop_windows_outlined,
-                          size: 50,
-                        ),
+                    child: CustomFocus(
+                      iconFocusNode: _icon2FocusNode,
+                      child: Icon(
+                        Icons.desktop_windows_outlined,
+                        size: 50,
                       ),
                     ),
                   ),
                   Actions(
-                    actions: <Type, Action<Intent>>{
-                      RightButtonIntent:
-                          CallbackAction<RightButtonIntent>(onInvoke: (intent) {
-                        _selectedIcon = Icons.tablet_android;
-                        _changeFocus(context, _icon4FocusNode!);
-                      }),
-                      LeftButtonIntent:
-                          CallbackAction<LeftButtonIntent>(onInvoke: (intent) {
-                        _selectedIcon = Icons.desktop_windows_outlined;
+                      actions: <Type, Action<Intent>>{
+                        RightButtonIntent: CallbackAction<RightButtonIntent>(
+                            onInvoke: (intent) {
+                          _selectedIcon = Icons.tablet_android;
+                          _changeFocus(context, _icon4FocusNode!);
+                        }),
+                        LeftButtonIntent: CallbackAction<LeftButtonIntent>(
+                            onInvoke: (intent) {
+                          _selectedIcon = Icons.desktop_windows_outlined;
 
-                        _changeFocus(context, _icon2FocusNode!);
-                      }),
-                    },
-                    child: Focus(
-                      focusNode: _icon3FocusNode,
-                      child: Container(
-                        padding: EdgeInsets.all(15),
-                        decoration: BoxDecoration(
-                            border: !(_icon3FocusNode?.hasFocus ?? false)
-                                ? null
-                                : Border.all(
-                                    width: 5, color: Color(0xffeb1555))),
-                        child: Icon(
-                          Icons.desktop_mac_outlined,
-                          size: 50,
-                        ),
-                      ),
-                    ),
-                  ),
+                          _changeFocus(context, _icon2FocusNode!);
+                        }),
+                      },
+                      child: CustomFocus(
+                          iconFocusNode: _icon3FocusNode,
+                          child: Icon(
+                            Icons.desktop_mac_outlined,
+                            size: 50,
+                          ))),
                   Actions(
-                    actions: <Type, Action<Intent>>{
-                      LeftButtonIntent:
-                          CallbackAction<LeftButtonIntent>(onInvoke: (intent) {
-                        _selectedIcon = Icons.desktop_mac_outlined;
-                        _changeFocus(context, _icon3FocusNode!);
-                      }),
-                    },
-                    child: Focus(
-                      focusNode: _icon4FocusNode,
-                      child: Container(
-                        padding: EdgeInsets.all(15),
-                        decoration: BoxDecoration(
-                            border: !(_icon4FocusNode?.hasFocus ?? false)
-                                ? null
-                                : Border.all(
-                                    width: 5, color: Color(0xffeb1555))),
+                      actions: <Type, Action<Intent>>{
+                        LeftButtonIntent: CallbackAction<LeftButtonIntent>(
+                            onInvoke: (intent) {
+                          _selectedIcon = Icons.desktop_mac_outlined;
+                          _changeFocus(context, _icon3FocusNode!);
+                        }),
+                      },
+                      child: CustomFocus(
+                        iconFocusNode: _icon4FocusNode,
                         child: Icon(
                           Icons.tablet_android,
                           size: 50,
                         ),
-                      ),
-                    ),
-                  )
+                      ))
                 ],
               )
             ],
